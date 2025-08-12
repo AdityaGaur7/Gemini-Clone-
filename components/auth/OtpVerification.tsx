@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Key, Shield, CheckCircle } from "lucide-react";
@@ -170,7 +170,7 @@ export default function OtpVerification({
 
       <div className="text-center space-y-4">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          Didn't receive the code?{" "}
+          Didn&apos;t receive the code?{" "}
           <button
             type="button"
             className="text-green-600 hover:text-green-700 font-semibold transition-colors duration-200"

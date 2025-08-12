@@ -31,7 +31,7 @@ export default function AuthPage() {
       } else {
         toast.error("Failed to send OTP. Please try again.");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -60,7 +60,7 @@ export default function AuthPage() {
       } else {
         toast.error("Invalid OTP. Please try again.");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);

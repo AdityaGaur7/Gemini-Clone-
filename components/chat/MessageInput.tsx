@@ -110,7 +110,7 @@ export default function MessageInput() {
           <div className="relative inline-block">
             <img
               src={selectedImage}
-              alt="Selected image"
+              alt="Selected image preview"
               className="max-w-xs h-auto rounded-xl shadow-lg"
             />
             <button

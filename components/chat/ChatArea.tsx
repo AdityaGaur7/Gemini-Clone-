@@ -7,7 +7,7 @@ import TypingIndicator from "./TypingIndicator";
 
 
 export default function ChatArea() {
-  const { currentChatroom, isTyping, darkMode, toggleDarkMode } = useStore();
+  const { currentChatroom, isTyping } = useStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isLoadingMore, setIsLoadingMore] = useState(false);

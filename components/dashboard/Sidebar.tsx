@@ -5,9 +5,6 @@ import {
   Plus,
   Trash2,
   MessageSquare,
-  MoreVertical,
-  Search,
- 
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,11 +24,9 @@ export default function Sidebar() {
     chatrooms,
     currentChatroom,
     searchQuery,
-    darkMode,
     addChatroom,
     deleteChatroom,
     setCurrentChatroom,
-    toggleDarkMode,
   } = useStore();
 
   const {
