@@ -16,7 +16,7 @@ export interface Message {
   id: string;
   content: string;
   sender: "user" | "ai";
-  timestamp: Date;
+  timestamp: Date | string;
   image?: string;
 }
 
@@ -24,8 +24,8 @@ export interface Chatroom {
   id: string;
   title: string;
   messages: Message[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 export interface AuthState {
@@ -45,4 +45,3 @@ export interface AppState extends AuthState, ChatState {
   darkMode: boolean;
   searchQuery: string;
 }
-

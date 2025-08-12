@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 export default function TypingIndicator() {
   return (
     <div className="flex gap-3 p-4 animate-fade-in">
-      <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-        <Bot className="w-5 h-5 text-white" />
+      <div className="flex-shrink-0 w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center shadow-sm">
+        <Bot className="w-5 h-5 text-gray-700 dark:text-gray-200" />
       </div>
 
       <div className="flex-1 max-w-[75%]">
@@ -17,9 +17,9 @@ export default function TypingIndicator() {
               Gemini is typing
             </span>
             <div className="flex space-x-1">
-              <div className="w-2 h-2 bg-blue-400 dark:bg-blue-500 rounded-full typing-dot"></div>
-              <div className="w-2 h-2 bg-blue-400 dark:bg-blue-500 rounded-full typing-dot"></div>
-              <div className="w-2 h-2 bg-blue-400 dark:bg-blue-500 rounded-full typing-dot"></div>
+              <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full typing-dot"></div>
+              <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full typing-dot"></div>
+              <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full typing-dot"></div>
             </div>
           </div>
         </div>

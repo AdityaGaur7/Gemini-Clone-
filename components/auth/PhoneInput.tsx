@@ -35,14 +35,22 @@ export default function PhoneInput({ onSubmit, isLoading }: PhoneInputProps) {
   useEffect(() => {
     const loadCountries = async () => {
       try {
+        setIsLoadingCountries(true);
         const countriesData = await fetchCountries();
-        setCountries(countriesData);
-        if (countriesData.length > 0) {
+
+        // Ensure countriesData is always an array and has valid data
+        if (Array.isArray(countriesData) && countriesData.length > 0) {
+          setCountries(countriesData);
+          console.log(countriesData);
           setSelectedCountry(countriesData[0]);
           setValue("countryCode", countriesData[0].dial_code);
+        } else {
+          console.warn("Invalid countries data received:", countriesData);
+          setCountries([]);
         }
       } catch (error) {
         console.error("Error loading countries:", error);
+        setCountries([]); // fallback to empty array on error
       } finally {
         setIsLoadingCountries(false);
       }
@@ -66,11 +74,11 @@ export default function PhoneInput({ onSubmit, isLoading }: PhoneInputProps) {
     <div className="w-full space-y-8 animate-fade-in">
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+          <div className="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center shadow-sm">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
           Welcome to Gemini Clone
         </h1>
         <p className="text-gray-600 dark:text-gray-400 text-lg">
@@ -91,15 +99,21 @@ export default function PhoneInput({ onSubmit, isLoading }: PhoneInputProps) {
                 type="button"
                 onClick={() => setShowCountryDropdown(!showCountryDropdown)}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 border border-r-0 rounded-l-xl bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700",
+                  "flex items-center gap-3 px-4 py-3 border border-r-0 rounded-l-xl bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700",
                   errors.countryCode && "border-red-500 focus:ring-red-500",
-                  "group-hover:border-blue-400 dark:group-hover:border-blue-400"
+                  "group-hover:border-gray-400 dark:group-hover:border-gray-400"
                 )}
                 disabled={isLoadingCountries}
               >
                 {selectedCountry ? (
                   <>
-                    <span className="text-xl">{selectedCountry.flag}</span>
+                    <span className="text-xl">
+                      <img
+                        src={selectedCountry.flag}
+                        alt={selectedCountry.name}
+                        className="w-6 h-6"
+                      />
+                    </span>
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
                       {selectedCountry.dial_code}
                     </span>
@@ -117,22 +131,36 @@ export default function PhoneInput({ onSubmit, isLoading }: PhoneInputProps) {
 
               {showCountryDropdown && (
                 <div className="absolute top-full left-0 z-20 w-72 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-2xl backdrop-blur-lg animate-fade-in">
-                  {countries.map((country) => (
-                    <button
-                      key={country.code}
-                      type="button"
-                      onClick={() => handleCountrySelect(country)}
-                      className="flex items-center gap-3 w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150 first:rounded-t-xl last:rounded-b-xl"
-                    >
-                      <span className="text-lg">{country.flag}</span>
-                      <span className="flex-1 text-sm font-medium text-gray-900 dark:text-white">
-                        {country.name}
-                      </span>
-                      <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                        {country.dial_code}
-                      </span>
-                    </button>
-                  ))}
+                  {countries.length === 0 ? (
+                    <div className="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
+                      {isLoadingCountries
+                        ? "Loading countries..."
+                        : "No countries available"}
+                    </div>
+                  ) : (
+                    countries.map((country) => (
+                      <button
+                        key={country.code}
+                        type="button"
+                        onClick={() => handleCountrySelect(country)}
+                        className="flex items-center gap-3 w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-150 first:rounded-t-xl last:rounded-b-xl"
+                      >
+                        <span className="text-lg">
+                          <img
+                            src={country.flag}
+                            alt={country.name}
+                            className="w-6 h-6"
+                          />
+                        </span>
+                        <span className="flex-1 text-sm font-medium text-gray-900 dark:text-white">
+                          {country.name}
+                        </span>
+                        <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                          {country.dial_code}
+                        </span>
+                      </button>
+                    ))
+                  )}
                 </div>
               )}
             </div>
@@ -142,9 +170,9 @@ export default function PhoneInput({ onSubmit, isLoading }: PhoneInputProps) {
               type="tel"
               placeholder="Enter phone number"
               className={cn(
-                "flex-1 px-4 py-3 border border-l-0 rounded-r-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200 input-focus",
+                "flex-1 px-4 py-3 border border-l-0 rounded-r-xl focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200",
                 errors.phone && "border-red-500 focus:ring-red-500",
-                "group-hover:border-blue-400 dark:group-hover:border-blue-400"
+                "group-hover:border-gray-400 dark:group-hover:border-gray-400"
               )}
               {...register("phone")}
             />

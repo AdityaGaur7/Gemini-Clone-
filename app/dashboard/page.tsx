@@ -34,24 +34,27 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
       <Header />
-      
-      <div className="flex h-[calc(100vh-4rem)]">
+
+      <div className="flex flex-1 h-[calc(100vh-4rem)] min-h-0">
         {/* Sidebar */}
         <div className="hidden md:block">
           <Sidebar />
         </div>
-        
+
         {/* Mobile Sidebar Overlay */}
-        <div className="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50" style={{ display: 'none' }}>
+        <div
+          className="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50"
+          style={{ display: "none" }}
+        >
           <div className="fixed inset-y-0 left-0 w-80 bg-white dark:bg-gray-800">
             <Sidebar />
           </div>
         </div>
 
         {/* Main Chat Area */}
-        <div className="flex-1 flex flex-col bg-white dark:bg-gray-800">
+        <div className="flex-1 flex flex-col bg-white dark:bg-gray-800 min-h-0">
           <ChatArea />
           <MessageInput />
         </div>
@@ -59,4 +62,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

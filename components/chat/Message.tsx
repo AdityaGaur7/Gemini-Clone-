@@ -34,8 +34,8 @@ export default function Message({ message }: MessageProps) {
       )}
     >
       {!isUser && (
-        <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-          <Bot className="w-5 h-5 text-white" />
+        <div className="flex-shrink-0 w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center shadow-sm">
+          <Bot className="w-5 h-5 text-gray-700 dark:text-gray-200" />
         </div>
       )}
 
@@ -49,7 +49,7 @@ export default function Message({ message }: MessageProps) {
           className={cn(
             "relative group/message rounded-2xl p-4 shadow-sm transition-all duration-200 hover:shadow-md",
             isUser
-              ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+              ? "bg-gray-900 text-white"
               : "bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700"
           )}
         >
@@ -111,22 +111,22 @@ export default function Message({ message }: MessageProps) {
         {/* Timestamp */}
         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
           {isUser && (
-            <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-br from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 rounded-full flex items-center justify-center">
-              <User className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+            <div className="flex-shrink-0 w-6 h-6 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center">
+              <User className="w-3 h-3 text-gray-700 dark:text-gray-300" />
             </div>
           )}
           <span className="font-medium">{formatTime(message.timestamp)}</span>
           {!isUser && (
-            <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-br from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 rounded-full flex items-center justify-center">
-              <User className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+            <div className="flex-shrink-0 w-6 h-6 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center">
+              <User className="w-3 h-3 text-gray-700 dark:text-gray-300" />
             </div>
           )}
         </div>
       </div>
 
       {isUser && (
-        <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 rounded-full flex items-center justify-center shadow-lg">
-          <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+        <div className="flex-shrink-0 w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center shadow-sm">
+          <User className="w-5 h-5 text-gray-700 dark:text-gray-300" />
         </div>
       )}
     </div>

@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  Plus, 
-  Trash2, 
-  MessageSquare, 
+import {
+  Plus,
+  Trash2,
+  MessageSquare,
   MoreVertical,
-  Search 
+  Search,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,15 +20,19 @@ import { cn } from "@/lib/utils";
 
 export default function Sidebar() {
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
-  
-  const { 
-    chatrooms, 
-    currentChatroom, 
-    searchQuery, 
-    addChatroom, 
-    deleteChatroom, 
-    setCurrentChatroom 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(
+    null
+  );
+
+  const {
+    chatrooms,
+    currentChatroom,
+    searchQuery,
+    darkMode,
+    addChatroom,
+    deleteChatroom,
+    setCurrentChatroom,
+    toggleDarkMode,
   } = useStore();
 
   const {
@@ -39,7 +45,7 @@ export default function Sidebar() {
   });
 
   // Filter chatrooms based on search query
-  const filteredChatrooms = chatrooms.filter(chatroom =>
+  const filteredChatrooms = chatrooms.filter((chatroom) =>
     chatroom.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -73,34 +79,56 @@ export default function Sidebar() {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Chatrooms
           </h2>
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <Plus className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+              title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {darkMode ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+            </button>
+
+            {/* Create Chatroom Button */}
+            <button
+              onClick={() => setShowCreateForm(true)}
+              className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+              title="Create new chatroom"
+            >
+              <Plus className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Create Chatroom Form */}
       {showCreateForm && (
         <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <form onSubmit={handleSubmit(handleCreateChatroom)} className="space-y-3">
+          <form
+            onSubmit={handleSubmit(handleCreateChatroom)}
+            className="space-y-3"
+          >
             <div>
               <input
                 type="text"
                 placeholder="Enter chatroom title..."
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                 {...register("title")}
               />
               {errors.title && (
-                <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>
+                <p className="text-sm text-red-600 mt-1">
+                  {errors.title.message}
+                </p>
               )}
             </div>
             <div className="flex space-x-2">
               <button
                 type="submit"
-                className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="flex-1 px-3 py-2 bg-gray-900 text-white rounded-lg hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-0"
               >
                 Create
               </button>
@@ -110,7 +138,7 @@ export default function Sidebar() {
                   setShowCreateForm(false);
                   reset();
                 }}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-0"
               >
                 Cancel
               </button>
@@ -133,19 +161,20 @@ export default function Sidebar() {
                 className={cn(
                   "group relative flex items-center p-3 rounded-lg cursor-pointer transition-colors",
                   currentChatroom?.id === chatroom.id
-                    ? "bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
+                    ? "bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600"
                     : "hover:bg-gray-50 dark:hover:bg-gray-700"
                 )}
                 onClick={() => setCurrentChatroom(chatroom)}
               >
                 <MessageSquare className="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" />
-                
+
                 <div className="flex-1 min-w-0">
                   <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {chatroom.title}
                   </h3>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {chatroom.messages.length} messages • {formatDate(chatroom.updatedAt)}
+                    {chatroom.messages.length} messages •{" "}
+                    {formatDate(chatroom.updatedAt)}
                   </p>
                 </div>
 
@@ -173,7 +202,8 @@ export default function Sidebar() {
               Delete Chatroom
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Are you sure you want to delete this chatroom? This action cannot be undone.
+              Are you sure you want to delete this chatroom? This action cannot
+              be undone.
             </p>
             <div className="flex space-x-3">
               <button
@@ -195,4 +225,3 @@ export default function Sidebar() {
     </div>
   );
 }
-

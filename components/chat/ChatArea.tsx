@@ -4,17 +4,45 @@ import { useEffect, useRef, useState } from "react";
 import { useStore } from "@/store/useStore";
 import Message from "./Message";
 import TypingIndicator from "./TypingIndicator";
-import { cn } from "@/lib/utils";
+import { Moon, Sun } from "lucide-react";
 
 export default function ChatArea() {
-  const { currentChatroom, isTyping } = useStore();
+  const { currentChatroom, isTyping, darkMode, toggleDarkMode } = useStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  // Auto-scroll to bottom when new messages arrive
+  // Auto-scroll to bottom when new messages arrive or typing starts
+  const scrollToBottom = (force = false) => {
+    if (messagesEndRef.current) {
+      const container = chatContainerRef.current;
+      if (container) {
+        const isAtBottom =
+          container.scrollTop + container.clientHeight >=
+          container.scrollHeight - 10;
+
+        // Only auto-scroll if user is already at bottom or if forced
+        if (isAtBottom || force) {
+          messagesEndRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+          });
+        }
+      }
+    }
+  };
+
+  // Scroll to bottom when messages change or typing starts
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollToBottom(true); // Force scroll for new messages
+  }, [currentChatroom?.messages?.length, isTyping]);
+
+  // Scroll to bottom after a short delay to ensure DOM is updated
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToBottom(true);
+    }, 100);
+    return () => clearTimeout(timer);
   }, [currentChatroom?.messages, isTyping]);
 
   // Simulate infinite scroll (load more messages when scrolling to top)
@@ -24,7 +52,7 @@ export default function ChatArea() {
     const { scrollTop } = chatContainerRef.current;
     if (scrollTop < 100) {
       setIsLoadingMore(true);
-      
+
       // Simulate loading more messages
       setTimeout(() => {
         setIsLoadingMore(false);
@@ -34,7 +62,7 @@ export default function ChatArea() {
 
   if (!currentChatroom) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center justify-center min-h-0">
         <div className="text-center">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             Welcome to Gemini Clone
@@ -48,21 +76,38 @@ export default function ChatArea() {
   }
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col min-h-0">
       {/* Chat Header */}
-      <div className="border-b border-gray-200 dark:border-gray-700 p-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-          {currentChatroom.title}
-        </h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {currentChatroom.messages.length} messages
-        </p>
+      <div className="flex-shrink-0 border-b border-gray-200 dark:border-gray-700 p-4 bg-white dark:bg-gray-800">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              {currentChatroom.title}
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {currentChatroom.messages.length} messages
+            </p>
+          </div>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleDarkMode}
+            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {darkMode ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Messages Container */}
       <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto"
+        className="flex-1 overflow-y-auto min-h-0 px-4 py-2"
         onScroll={handleScroll}
       >
         {/* Loading More Indicator */}
@@ -73,7 +118,7 @@ export default function ChatArea() {
         )}
 
         {/* Messages */}
-        <div className="space-y-1">
+        <div className="space-y-1 pb-2">
           {currentChatroom.messages.map((message) => (
             <Message key={message.id} message={message} />
           ))}
@@ -83,9 +128,8 @@ export default function ChatArea() {
         {isTyping && <TypingIndicator />}
 
         {/* Auto-scroll anchor */}
-        <div ref={messagesEndRef} />
+        <div ref={messagesEndRef} className="h-1" />
       </div>
     </div>
   );
 }
-
