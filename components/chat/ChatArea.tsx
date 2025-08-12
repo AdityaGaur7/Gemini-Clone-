@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useStore } from "@/store/useStore";
 import Message from "./Message";
 import TypingIndicator from "./TypingIndicator";
-import { Moon, Sun } from "lucide-react";
+
 
 export default function ChatArea() {
   const { currentChatroom, isTyping, darkMode, toggleDarkMode } = useStore();
@@ -89,18 +89,7 @@ export default function ChatArea() {
             </p>
           </div>
 
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
-            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {darkMode ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-          </button>
+        
         </div>
       </div>
 

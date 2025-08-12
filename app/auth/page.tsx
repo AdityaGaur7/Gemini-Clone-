@@ -113,10 +113,7 @@ export default function AuthPage() {
           )}
         </div>
 
-        {/* Footer */}
-        <div className="text-center mt-8 text-sm text-gray-600 dark:text-gray-400">
-          <p>Powered by Next.js &amp; Tailwind CSS</p>
-        </div>
+        
       </div>
     </div>
   );

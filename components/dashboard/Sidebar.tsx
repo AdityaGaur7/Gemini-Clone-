@@ -7,8 +7,7 @@ import {
   MessageSquare,
   MoreVertical,
   Search,
-  Moon,
-  Sun,
+ 
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -80,18 +79,7 @@ export default function Sidebar() {
             Chatrooms
           </h2>
           <div className="flex items-center gap-2">
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
-              title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {darkMode ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
-            </button>
+           
 
             {/* Create Chatroom Button */}
             <button
